@@ -1,0 +1,16 @@
+{
+  "name": "Hermes AI Swap",
+  "short_name": "Hermes",
+  "description": "Universal Multi-Wallet DeFi Exchange Platform",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#00d4aa",
+  "background_color": "#0f0f23",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+} 
