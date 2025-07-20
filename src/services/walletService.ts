@@ -39,9 +39,12 @@ export class WalletService {
   // MetaMask Connection
   async connectMetaMask(): Promise<WalletInfo> {
     try {
-      if (!window.ethereum) {
+      if (typeof window === 'undefined' || !window.ethereum) {
         throw new Error('MetaMask is not installed');
       }
+
+      // Request account access
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
 
       this.provider = new ethers.BrowserProvider(window.ethereum);
       this.signer = await this.provider.getSigner();
@@ -49,6 +52,23 @@ export class WalletService {
       const address = await this.signer.getAddress();
       const balance = await this.provider.getBalance(address);
       const network = await this.provider.getNetwork();
+      
+      // Switch to BSC if not already on it
+      if (Number(network.chainId) !== 56) {
+        try {
+          await this.switchNetwork('0x38');
+          // Refresh network info after switch
+          const newNetwork = await this.provider.getNetwork();
+          return {
+            address,
+            balance: ethers.formatEther(balance),
+            chainId: Number(newNetwork.chainId),
+            networkName: this.getNetworkName(Number(newNetwork.chainId))
+          };
+        } catch (switchError) {
+          console.warn('Failed to switch to BSC, continuing with current network');
+        }
+      }
       
       // Get network name based on chainId
       const networkName = this.getNetworkName(Number(network.chainId));
@@ -68,9 +88,11 @@ export class WalletService {
   // WalletConnect Connection
   async connectWalletConnect(): Promise<WalletInfo> {
     try {
-      if (!window.ethereum) {
+      if (typeof window === 'undefined' || !window.ethereum) {
         throw new Error('No wallet provider found');
       }
+
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
 
       this.provider = new ethers.BrowserProvider(window.ethereum);
       this.signer = await this.provider.getSigner();
@@ -97,9 +119,11 @@ export class WalletService {
   // Trust Wallet Connection
   async connectTrustWallet(): Promise<WalletInfo> {
     try {
-      if (!window.ethereum) {
+      if (typeof window === 'undefined' || !window.ethereum) {
         throw new Error('Trust Wallet is not installed');
       }
+
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
 
       this.provider = new ethers.BrowserProvider(window.ethereum);
       this.signer = await this.provider.getSigner();
@@ -126,9 +150,11 @@ export class WalletService {
   // Coinbase Wallet Connection
   async connectCoinbaseWallet(): Promise<WalletInfo> {
     try {
-      if (!window.ethereum) {
+      if (typeof window === 'undefined' || !window.ethereum) {
         throw new Error('Coinbase Wallet is not installed');
       }
+
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
 
       this.provider = new ethers.BrowserProvider(window.ethereum);
       this.signer = await this.provider.getSigner();
@@ -155,7 +181,7 @@ export class WalletService {
   // Switch Network
   async switchNetwork(chainId: string): Promise<void> {
     try {
-      if (!window.ethereum) {
+      if (typeof window === 'undefined' || !window.ethereum) {
         throw new Error('No wallet provider found');
       }
 
@@ -176,7 +202,7 @@ export class WalletService {
   // Add Network
   async addNetwork(chainId: string): Promise<void> {
     try {
-      if (!window.ethereum) {
+      if (typeof window === 'undefined' || !window.ethereum) {
         throw new Error('No wallet provider found');
       }
 
@@ -244,4 +270,4 @@ export class WalletService {
   }
 }
 
-export const walletService = new WalletService(); 
+export const walletService = new WalletService();
