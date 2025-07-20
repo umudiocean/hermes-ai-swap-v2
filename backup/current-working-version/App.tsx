@@ -9,9 +9,7 @@ import {
   TrendingUp,
   Shield
 } from 'lucide-react';
-import { useWallet } from './hooks/useWallet';
-import WalletModal from './components/WalletModal';
-import ConnectedWallet from './components/ConnectedWallet';
+
 
 // Token data
 const tokens = {
@@ -43,22 +41,6 @@ function App() {
   const [sellAmount, setSellAmount] = useState('0.00');
   const [buyAmount, setBuyAmount] = useState('0.00');
   const [selectedModule, setSelectedModule] = useState('swap');
-  const [showWalletModal, setShowWalletModal] = useState(false);
-
-  // Wallet hook
-  const {
-    account,
-    isConnected,
-    balance,
-    networkName,
-    isLoading,
-    error,
-    connectMetaMask,
-    connectWalletConnect,
-    connectTrustWallet,
-    connectCoinbaseWallet,
-    disconnectWallet,
-  } = useWallet();
 
   const swapTokens = () => {
     setSellToken(buyToken);
@@ -105,29 +87,17 @@ function App() {
       <header className="relative z-10 px-4 md:px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-center space-x-4 md:space-x-8">
           {/* Logo */}
-          <div className="flex items-center space-x-2 relative group">
-            {/* Logo Container */}
-            <div className="relative px-4 py-2 rounded-lg border border-[#62cbc1] bg-black bg-opacity-20 backdrop-blur-sm">
-              <div className="flex items-center space-x-1">
-                <span className="text-white text-lg md:text-xl font-bold relative z-10">Hermes</span>
-                <span className="text-[#62cbc1] text-lg md:text-xl font-bold relative z-10">AI</span>
-                <span className="text-[#62cbc1] text-lg md:text-xl font-bold relative z-10">Swap</span>
-              </div>
-              
-              {/* Animated Border */}
-              <div className="absolute inset-0 rounded-lg overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#62cbc1] to-transparent opacity-15 animate-pulse" style={{animationDuration: '4s'}}></div>
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#62cbc1] to-transparent opacity-10 animate-pulse delay-1000" style={{animationDuration: '4s'}}></div>
-              </div>
-              
-              {/* Glow Effect */}
-              <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-[#62cbc1] to-transparent opacity-10 blur-sm group-hover:opacity-20 transition-opacity duration-300"></div>
-            </div>
+          <div className="flex items-center space-x-1 relative">
+            <span className="text-white text-lg md:text-xl font-bold relative z-10">Hermes</span>
+            <span className="text-jupiter-green text-lg md:text-xl font-bold relative z-10">AI</span>
+            <span className="text-jupiter-green text-lg md:text-xl font-bold relative z-10">Swap</span>
             
-            {/* Version Badge */}
-            <div className="flex items-center space-x-1">
-              <div className="w-2 h-2 bg-[#62cbc1] rounded-full animate-pulse"></div>
-              <span className="text-xs text-[#62cbc1] font-medium">V4</span>
+            {/* Lazer çizgileri */}
+            <div className="absolute inset-0 overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-jupiter-green to-transparent animate-pulse"></div>
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-jupiter-green to-transparent animate-pulse delay-100"></div>
+              <div className="absolute top-1/2 left-0 w-0.5 h-full bg-gradient-to-b from-transparent via-jupiter-green to-transparent animate-pulse delay-200"></div>
+              <div className="absolute top-1/2 right-0 w-0.5 h-full bg-gradient-to-b from-transparent via-jupiter-green to-transparent animate-pulse delay-300"></div>
             </div>
           </div>
           
@@ -175,20 +145,6 @@ function App() {
               }`}></div>
             </button>
             
-            <button 
-              onClick={() => setSelectedModule('analysis')}
-              className={`px-3 py-2 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 relative group button-animate ${
-                selectedModule === 'analysis' 
-                  ? 'bg-jupiter-green text-black shadow-lg ring-2 ring-jupiter-green ring-opacity-50' 
-                  : 'text-white hover:text-jupiter-green'
-              }`}
-            >
-              <span className="relative z-10 text-sm md:text-base">AI Crypto Analysis</span>
-              <div className={`absolute inset-0 bg-jupiter-green rounded-lg transition-opacity duration-300 ${
-                selectedModule === 'analysis' ? 'opacity-20' : 'opacity-0 group-hover:opacity-10'
-              }`}></div>
-            </button>
-            
             <a 
               href="https://x.com/hermes_ai_trade" 
               target="_blank" 
@@ -212,22 +168,10 @@ function App() {
           
           {/* Connect Button */}
           <div className="flex items-center">
-            {isConnected ? (
-              <ConnectedWallet
-                account={account!}
-                balance={balance}
-                networkName={networkName}
-                onDisconnect={disconnectWallet}
-              />
-            ) : (
-              <button 
-                onClick={() => setShowWalletModal(true)}
-                className="bg-jupiter-gray text-white px-3 md:px-4 py-2 rounded-lg hover:bg-gray-700 transition-all duration-300 transform hover:scale-105 flex items-center space-x-2 button-animate"
-              >
-                <Shield className="w-3 h-3 md:w-4 md:h-4" />
-                <span className="text-sm md:text-base">Connect</span>
-              </button>
-            )}
+            <button className="bg-jupiter-gray text-white px-3 md:px-4 py-2 rounded-lg hover:bg-gray-700 transition-all duration-300 transform hover:scale-105 flex items-center space-x-2 button-animate">
+              <Shield className="w-3 h-3 md:w-4 md:h-4" />
+              <span className="text-sm md:text-base">Connect</span>
+            </button>
           </div>
         </div>
       </header>
@@ -251,7 +195,7 @@ function App() {
                     : 'bg-transparent text-gray-400 hover:text-white'
                 }`}
               >
-                <div className={`absolute inset-0 bg-gradient-to-r from-jupiter-green to-[#62cbc1] transition-opacity duration-300 ${
+                <div className={`absolute inset-0 bg-gradient-to-r from-jupiter-green to-blue-500 transition-opacity duration-300 ${
                   selectedModule === 'swap' ? 'opacity-100' : 'opacity-0 group-hover:opacity-10'
                 }`}></div>
                 <div className={`absolute inset-0 bg-white transition-opacity duration-300 ${
@@ -276,7 +220,7 @@ function App() {
                     : 'bg-transparent text-gray-400 hover:text-white'
                 }`}
               >
-                <div className={`absolute inset-0 bg-gradient-to-r from-jupiter-green to-[#62cbc1] transition-opacity duration-300 ${
+                <div className={`absolute inset-0 bg-gradient-to-r from-jupiter-green to-blue-500 transition-opacity duration-300 ${
                   selectedModule === 'referral' ? 'opacity-100' : 'opacity-0 group-hover:opacity-10'
                 }`}></div>
                 <div className={`absolute inset-0 bg-white transition-opacity duration-300 ${
@@ -301,7 +245,7 @@ function App() {
                     : 'bg-transparent text-gray-400 hover:text-white'
                 }`}
               >
-                <div className={`absolute inset-0 bg-gradient-to-r from-jupiter-green to-[#62cbc1] transition-opacity duration-300 ${
+                <div className={`absolute inset-0 bg-gradient-to-r from-jupiter-green to-blue-500 transition-opacity duration-300 ${
                   selectedModule === 'stake' ? 'opacity-100' : 'opacity-0 group-hover:opacity-10'
                 }`}></div>
                 <div className={`absolute inset-0 bg-white transition-opacity duration-300 ${
@@ -378,44 +322,13 @@ function App() {
             </div>
 
             {/* Connect Wallet Button */}
-            <button 
-              onClick={() => setShowWalletModal(true)}
-              className="w-full bg-jupiter-green text-black font-bold py-3 px-4 rounded-lg hover:bg-[#62cbc1] hover:bg-opacity-80 transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2 button-animate"
-            >
+            <button className="w-full bg-jupiter-green text-black font-bold py-3 px-4 rounded-lg hover:bg-green-400 transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2 button-animate">
               <Wallet className="w-5 h-5" />
               <span>Connect Wallet</span>
             </button>
           </div>
         </div>
       </main>
-
-      {/* Wallet Modal */}
-      <WalletModal
-        isOpen={showWalletModal}
-        onClose={() => setShowWalletModal(false)}
-        onConnectMetaMask={connectMetaMask}
-        onConnectWalletConnect={connectWalletConnect}
-        onConnectTrustWallet={connectTrustWallet}
-        onConnectCoinbaseWallet={connectCoinbaseWallet}
-        isLoading={isLoading}
-      />
-
-      {/* Error Display */}
-      {error && (
-        <div className="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg z-50 max-w-sm">
-          <div className="flex items-center space-x-2">
-            <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-            <span className="text-sm font-medium">Connection Error</span>
-          </div>
-          <p className="text-xs mt-1 opacity-90">{error}</p>
-          <button 
-            onClick={() => window.location.reload()}
-            className="text-xs underline mt-2 hover:opacity-80"
-          >
-            Try Again
-          </button>
-        </div>
-      )}
     </div>
   );
 }
