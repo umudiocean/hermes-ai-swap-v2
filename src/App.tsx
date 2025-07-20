@@ -195,10 +195,7 @@ function App() {
           
           {/* Connect Button */}
           <div className="flex items-center">
-            <div className="flex items-center space-x-3">
-              <NetworkSwitcher />
-              <WalletConnect />
-            </div>
+            <WalletConnect />
           </div>
         </div>
       </header>
@@ -349,12 +346,7 @@ function App() {
             </div>
 
             {/* Connect Wallet Button */}
-            <button 
-              className="w-full bg-jupiter-green text-black font-bold py-3 px-4 rounded-lg hover:bg-[#62cbc1] hover:bg-opacity-80 transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2 button-animate"
-            >
-              <Wallet className="w-5 h-5" />
-              <span>Connect Wallet</span>
-            </button>
+            <WalletConnect />
           </div>
         </div>
       </main>
