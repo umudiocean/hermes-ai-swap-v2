@@ -195,7 +195,7 @@ function App() {
           
           {/* Connect Button */}
           <div className="flex items-center">
-            <WalletConnect />
+            <WalletConnect className="bg-jupiter-gray text-white px-3 md:px-4 py-2 rounded-lg hover:bg-gray-700 transition-all duration-300 transform hover:scale-105 flex items-center space-x-2 button-animate" />
           </div>
         </div>
       </header>
