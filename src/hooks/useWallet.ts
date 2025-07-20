@@ -176,7 +176,7 @@ export const useWallet = () => {
   // Auto-reconnection on page load
   useEffect(() => {
     const checkExistingConnection = async () => {
-      if (window.ethereum && !state.isConnected) {
+      if (typeof window !== 'undefined' && window.ethereum && !state.isConnected) {
         try {
           const accounts = await window.ethereum.request({ method: 'eth_accounts' });
           if (accounts.length > 0) {
@@ -194,7 +194,7 @@ export const useWallet = () => {
 
   // Listen for account changes
   useEffect(() => {
-    if (window.ethereum) {
+    if (typeof window !== 'undefined' && window.ethereum) {
       const handleAccountsChanged = (accounts: string[]) => {
         if (accounts.length === 0) {
           // User disconnected

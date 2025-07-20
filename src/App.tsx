@@ -9,9 +9,8 @@ import {
   TrendingUp,
   Shield
 } from 'lucide-react';
-import { useWallet } from './hooks/useWallet';
-import WalletModal from './components/WalletModal';
-import ConnectedWallet from './components/ConnectedWallet';
+import WalletConnect from './components/WalletConnect';
+import NetworkSwitcher from './components/NetworkSwitcher';
 
 // Token data
 const tokens = {
@@ -43,22 +42,6 @@ function App() {
   const [sellAmount, setSellAmount] = useState('0.00');
   const [buyAmount, setBuyAmount] = useState('0.00');
   const [selectedModule, setSelectedModule] = useState('swap');
-  const [showWalletModal, setShowWalletModal] = useState(false);
-
-  // Wallet hook
-  const {
-    account,
-    isConnected,
-    balance,
-    networkName,
-    isLoading,
-    error,
-    connectMetaMask,
-    connectWalletConnect,
-    connectTrustWallet,
-    connectCoinbaseWallet,
-    disconnectWallet,
-  } = useWallet();
 
   const swapTokens = () => {
     setSellToken(buyToken);
@@ -212,22 +195,10 @@ function App() {
           
           {/* Connect Button */}
           <div className="flex items-center">
-            {isConnected ? (
-              <ConnectedWallet
-                account={account!}
-                balance={balance}
-                networkName={networkName}
-                onDisconnect={disconnectWallet}
-              />
-            ) : (
-              <button 
-                onClick={() => setShowWalletModal(true)}
-                className="bg-jupiter-gray text-white px-3 md:px-4 py-2 rounded-lg hover:bg-gray-700 transition-all duration-300 transform hover:scale-105 flex items-center space-x-2 button-animate"
-              >
-                <Shield className="w-3 h-3 md:w-4 md:h-4" />
-                <span className="text-sm md:text-base">Connect</span>
-              </button>
-            )}
+            <div className="flex items-center space-x-3">
+              <NetworkSwitcher />
+              <WalletConnect />
+            </div>
           </div>
         </div>
       </header>
@@ -379,7 +350,6 @@ function App() {
 
             {/* Connect Wallet Button */}
             <button 
-              onClick={() => setShowWalletModal(true)}
               className="w-full bg-jupiter-green text-black font-bold py-3 px-4 rounded-lg hover:bg-[#62cbc1] hover:bg-opacity-80 transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2 button-animate"
             >
               <Wallet className="w-5 h-5" />
@@ -388,34 +358,6 @@ function App() {
           </div>
         </div>
       </main>
-
-      {/* Wallet Modal */}
-      <WalletModal
-        isOpen={showWalletModal}
-        onClose={() => setShowWalletModal(false)}
-        onConnectMetaMask={connectMetaMask}
-        onConnectWalletConnect={connectWalletConnect}
-        onConnectTrustWallet={connectTrustWallet}
-        onConnectCoinbaseWallet={connectCoinbaseWallet}
-        isLoading={isLoading}
-      />
-
-      {/* Error Display */}
-      {error && (
-        <div className="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg z-50 max-w-sm">
-          <div className="flex items-center space-x-2">
-            <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-            <span className="text-sm font-medium">Connection Error</span>
-          </div>
-          <p className="text-xs mt-1 opacity-90">{error}</p>
-          <button 
-            onClick={() => window.location.reload()}
-            className="text-xs underline mt-2 hover:opacity-80"
-          >
-            Try Again
-          </button>
-        </div>
-      )}
     </div>
   );
 }
